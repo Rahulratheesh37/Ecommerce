@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <link rel="stylesheet" href="/css/add-product.css">
+</head>
+<body>
+    <div class="main">
+        <div><h1 style="color: rgb(45, 28, 80);">UPDATE PRODUCT</h1></div>
+        <div class="forms">
+            <form action="/UpdateProduct/<%= product._id %>" method="post" enctype="multipart/form-data">
+                <input type="text" placeholder="Product Name" name="productName" class="input" value="<%= product.productName %>"><br><br>
+                
+                <input multiple type="file" name="picture[]" placeholder="Product Image"><br><br>
+
+                <% product.picture.forEach(image => { %>
+                    <td><img style="width: 60px;height: 60px" src="/AddPictures/<%= image %>" alt="<%= image %>"></td><br>
+                <% }) %>
+                <input type="number" placeholder="Price" name="price" class="input" value="<%= product.price %>"><br><br>
+
+                <select name="category" id="" class="input">
+                    <% category.forEach(category => { %>
+                        <option value="<%=category._id  %>"> 
+                            <%=category.name %>
+                        </option>
+                    <% }) %>
+                    
+                </select><br><br>
+
+                <select name="subcategory" id="" class="input">
+                    <% subCategory.forEach(subCategory => { %>
+                        <option value="<%=subCategory._id  %>">
+                            <%=subCategory.SubCategorie %>
+                        </option>
+                    <% }) %>
+                    
+                </select><br><br>
+
+                <input type="text" placeholder="Product Description" name="description" class="input" value="<%= product.description %>"><br><br>
+           <input type="number" placeholder="Stock of product" name="Stock" class="input" value="<%= product.Stock %>"><br><br>
+                <input type="number" name="size" placeholder="Size" class="input" value="<%= product.size %>"><br><br>
+                <input type="text" name="colour" placeholder="Choose Colour" class="input" value="<%= product.colour %>"><br><br>
+                <button type="submit" style="width: 20vh; height: 5vh; border-radius: 5vh; background-color: rgb(74, 134, 100); border: none; margin-top: 5vh;" class="input">UPDATE</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

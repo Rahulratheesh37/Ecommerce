@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    
+    <link rel="stylesheet" href="/css/adminout.css">
+    <style>
+        body {
+            font-family: 'Arial',sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .flex {
+            display: flex;
+        }
+        .sidebar {
+            background-color: #2D3748;
+            color: #fff;
+            width: 240px;
+            height: 100vh;
+            padding: 1rem;
+            position: fixed;
+        }
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar nav a {
+            display: block;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.375rem;
+            text-decoration: none;
+        }
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #4A5568;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem;
+            width: calc(100% - 240px);
+            background-color: #f7fafc;
+            min-height: 100vh;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        section {
+            display: none;
+        }
+        section.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background-color: #fff;
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+        table th, table td {
+            padding: 1rem;
+            text-align: left;
+        }
+        table thead {
+            background-color: #2D3748;
+            color: #fff;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f7fafc;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            color: #fff;
+            border-radius: 0.375rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-add {
+            background-color: #4299e1;
+            margin-bottom: 1rem;
+        }
+        .btn-add:hover {
+            background-color: #3182ce;
+        }
+        .btn-edit {
+            background-color: #ecc94b;
+        }
+        .btn-edit:hover {
+            background-color: #d69e2e;
+        }
+        .btn-delete {
+            background-color: #f56565;
+        }
+        .btn-delete:hover {
+            background-color: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex">
+        <div class="sidebar">
+            <h2>Admin Dashboard</h2>
+            <nav>
+                <a href="#" data-section="users"><i class="fas fa-users mr-2"></i> Users</a>
+                <a href="#" data-section="products"><i class="fas fa-box mr-2"></i> Products</a>
+                <a href="#" data-section="orders"><i class="fas fa-shopping-cart mr-2"></i> Orders</a>
+                <a href="#" data-section="categories"><i class="fas fa-list mr-2"></i> Categories</a>
+                <a href="#" data-section="subcategories"><i class="fas fa-list-alt mr-2"></i> Sub Categories</a>
+                <a href="#" data-section="reviews"><i class="fas fa-star mr-2"></i> Reviews</a>
+                <a href="#" data-section="analytics"><i class="fas fa-chart-line mr-2"></i> Analytics</a>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <h1>Welcome, Admin</h1>
+
+            <section id="users" class="active">
+                <h2 class="text-2xl mb-4">Manage Users</h2>
+                <a href="#" class="btn btn-add">Add User</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Profile Picture</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% checkUsers.forEach((user) => { %>
+                            <tr>
+                                <td><%= user._id %></td>
+                                <td><%= user.username %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.username %></td>
+                                <td>
+                                    <% if (user.block) { %>
+                                        <a href="/UnBlockUser/<%= user._id %>" class="btn btn-delete">UnBlock</a>
+                                    <% } else { %>
+                                        <a href="" class="btn btn-edit">Edit</a>
+                                        <a href="/BlockUser/<%= user._id %>" class="btn btn-edit">Block</a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="products">
+                <h2 class="text-2xl mb-4">Manage Products</h2>
+                <a href="/addproduct" class="btn btn-add">Add Product</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Sub Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%  productCount.forEach((product) => { %>
+                            <tr>
+                                <% product.picture.forEach(element => { %>
+                                    <td style="display: flex;flex-direction: column;"><img  style="width: 130px;height: 120px;" src="AddPictures/<%=element %>" alt="<%= element %>"></td>
+                                <% }) %>
+                                
+                                <td><%= product.productName %></td>
+                                       <td><%= product.price %></td>
+                                        <td><%= product.category.name %></td>
+                                        <td><%= product.SubCategory.SubCategorie %></td>
+                                <td>
+                                    <a href="/Updateproduct/<%= product._id %>" class="btn btn-edit">Edit</a>
+                                    <a href="/deleteProduct/<%= product._id %>" class="btn btn-delete">Delete</a>
+                                </td>
+                            </tr>
+                            <div style="width: 100px;background-color: black;height: 2px;"></div>
+                        <% }) %>
+                        
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="orders">
+                <h2 class="text-2xl mb-4">Manage Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Invoice</th>
+                            <th>Actions</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>johndoe</td>
+                            <td>Pending</td>
+                            <td><img src="path/to/invoice1.jpg" alt="Invoice Image" width="50"></td>
+                            <td>
+                                <a href="#" class="btn btn-edit">View</a>
+                                <a href="#" class="btn btn-delete">Cancel</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>janedoe</td>
+                            <td>Shipped</td>
+                            <td><img src="path/to/invoice2.jpg" alt="Invoice Image" width="50"></td>
+                            <td>
+                                <a href="#" class="btn btn-edit">View</a>
+                            <a href="#" class="btn btn-delete">Cancel</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="categories">
+                <h2 class="text-2xl mb-4">Manage Categories</h2>
+                <a href="/addCategory" class="btn btn-add">Add Category</a>
+                <table>
+                    <thead>
+                        <tr>
+                            
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Product-Count</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <% checkCategory.forEach((category) => { %>
+                            <tbody>
+                            <tr>
+                                <td><%= category.name %></td>
+                                <td><%= category._id %></td>
+                                <% 
+                                let count =0; 
+                                productCount.forEach(product => {
+                                    if (category._id.toString() === product.category._id.toString()) {
+                                        count++;
+                                    }
+                                });
+                            %>
+                            <td><%= count %></td>
+                                <td>
+                                    <a href="/UpdateCategory/<%= category._id %>" class="btn btn-edit" onclick="reloadFunction()">Edit</a>
+                                    <a href="/deleteCategory/<%= category._id %>" class="btn btn-delete" onclick="reloadFunction()">Delete</a>
+                                </td>
+                            </tr>
+                        <%  }) %>
+
+                          </tbody>   
+                   
+                </table>
+            </section>
+
+            <section id="subcategories">
+                <h2 class="text-2xl mb-4">Manage Sub Categories</h2>
+                <a href="/addSubCategory" class="btn btn-add">Add Sub Category</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% checkSubCategory.forEach((subcategory) => { %>
+                            <tr>
+                                <td><%= subcategory._id %></td>
+                                <td><%= subcategory.SubCategorie %></td>
+                                <% checkCategory.forEach((category)=>{ %>
+                                <% if (category._id.toString() === subcategory.CategoryId.toString()) { %>
+                                    <td><%= category.name %></td>
+                                <% } %>   
+                               <% }) %>
+                               
+                                <td>
+                                    <a href="/UpdateSubCategory/<%= subcategory._id %>" class="btn btn-edit">Edit</a>
+                                    <a href="/DeleteSubCategory/<%= subcategory._id %>" class="btn btn-delete">Delete</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="reviews">
+                <h2 class="text-2xl mb-4">Manage Reviews</h2>
+                <a href="#" class="btn btn-add">Add Review</a>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product</th>
+                            <th>User</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Product 1</td>
+                            <td>johndoe</td>
+                            <td>4</td>
+                            <td>Great product!</td>
+                            <td>
+                                <a href="#" class="btn btn-edit">Edit</a>
+                                <a href="#" class="btn btn-delete">Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Product 2</td>
+                            <td>janedoe</td>
+                            <td>5</td>
+                            <td>Excellent quality.</td>
+                            <td>
+                                <a href="#" class="btn btn-edit">Edit</a>
+                                <a href="#" class="btn btn-delete">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="analytics">
+                <h2 class="text-2xl mb-4">Analytics</h2>
+                <!-- Analytics content here -->
+                <p>Analytics data and charts go here...</p>
+            </section>
+        </div>
+    </div>
+    
+    <script>
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                document.querySelectorAll('.sidebar nav a').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                const section = this.getAttribute('data-section');
+                document.querySelectorAll('section').forEach(sec => {
+                    sec.classList.remove('active');
+                });
+                document.getElementById(section).classList.add('active');
+            });
+            function reloadFunction(){
+                location.reload()
+            }
+        });
+    </script>
+</body>
+</html>

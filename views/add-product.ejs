@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/add-product.css">
+</head>
+<body">
+<div class="main">
+        <div>
+            <h1 style="color: rgb(89, 88, 91);">ADD PRODUCT</h1>
+        </div>
+        <div class="forms">
+            <form action="/addproduct" method="post" enctype="multipart/form-data">
+                <input type="text" placeholder="Product-Name" name="productName" class="input"><br><br>
+                <input type="file" name="picture" placeholder="Product Image" multiple required><br><br>
+                <input type="number" placeholder="Price" name="price" class="input"><br><br>
+                
+                <select name="category" id="categoryId" class="input" onchange="fetchSubCategory()"> <br><br>
+                    <option value="">Select Category</option>
+                    <% category.forEach(category => { %>
+                      <option value="<%=category._id%>">
+                        <%=category.name%>
+                    </option>
+                    <% }) %>
+                   
+                </select><br><br>
+
+                 <select name="SubCategory" id="subcategoryId" class="input">class="input"><br><br>
+                    <option value="">Select Sub Category</option>
+                        
+                    </select><br><br>
+
+                <input type="text" placeholder="product-description" name="description" name="product description" class="input"><br><br>
+                <input type="number" placeholder="Stoke of product" name="Stock" class="input"><br><br>
+                <input type="number" name="size" placeholder="size" class="input"><br><br>
+                <input type="text" name="colour" placeholder="choose colour" class="input"><br><br>
+
+                <button type="submit" style="width: 20vh; height: 5vh;border-radius: 5vh; background-color: 
+                         rgb(74, 134, 100);border: 10vh orangered;margin-top: 5vh;" class="input">ADD</button>
+            </form>
+
+
+        </div>
+       
+       
+             
+    
+    
+    </div>
+
+    <script>
+      function fetchSubCategory(){
+        
+    const category = document.getElementById('categoryId').value
+                 fetch(`http://localhost:1000/GetSubCategory/${category}`)
+                 .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    const subCategoty = document.getElementById('subcategoryId');
+    subCategoty.innerHTML = '<option value="">Select a subcategory</option>'
+    data.forEach(element => {
+        const option = document.createElement('option');
+        option.value = element._id
+        option.textContent = element.SubCategorie;
+        subCategoty.appendChild(option)
+    });
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+        }
+    </script>
+
+    </body>
+
+
+</html>

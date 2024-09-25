@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/addCategory.css">
+    <title>Add Sub Category</title>
+</head>
+<body>
+     <header class="header">
+        <div class="container">
+            <nav>
+                <div class="bodys">
+                    <h1> Update Add Sub Category</h1></div>
+                    
+                    <div>
+                        <form action="UpdateSubCategory/<%= Updatesubcategory._id %>" id="submitForm" method="post"><br>
+                         <hr>
+                        <label  style="font-weight: bolder;padding-left: 5vh;"> Sub Category Name</label>
+                        <input id="SuCategoryName" type="text" placeholder="SubCategorie Name" name="SubCategorie" class="input" value="<%= Updatesubcategory.SubCategorie %>"><br><br>
+                        <hr>
+                      <button onclick="UpdateSubCategory('<%=Updatesubcategory._id%>')"  class="add" type="submit">Update Sub Category</button>
+                    </form> 
+                    </div>
+                    
+                
+            </nav>
+        </div>
+
+     </header>
+     <!-- <script>
+ async function UpdateSubCategory (SuCategoryId){
+try{
+    const subCategoryName = document.getElementById('SuCategoryName').value;
+       const response =   await fetch(`/UpdateSubCategory/${SuCategoryId}`)
+          console.log(response); 
+    const data = await response.json()
+console.log(data);
+
+}catch(error){
+       console.log(error.message);
+}
+    
+        } -->
+     </script>
+</body>
+</html>
+ 

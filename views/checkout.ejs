@@ -1,0 +1,151 @@
+<%- include('header') %>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/semantic.min.css"/>
+<!-- Bootstrap theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/themes/bootstrap.min.css"/>
+
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread"><span><a href="/product">Home</a></span> / <span>Checkout</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="colorlib-product">
+			<div class="container">
+				<div class="row row-pb-lg">
+					<div class="col-sm-10 offset-md-1">
+						<div class="process-wrap">
+							<div class="process text-center active">
+								<p><span>01</span></p>
+								<h3>Shopping Cart</h3>
+							</div>
+							<div class="process text-center active">
+								<p><span>02</span></p>
+								<h3>Checkout</h3>
+							</div>
+							<div class="process text-center">
+								<p><span>03</span></p>
+								<h3>Order Complete</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+
+					<%# address start%> 
+					<div class="col-lg-8">
+						<select name="" id="">
+							<option value="">select Address</option>
+						<% address.forEach(item => { %>
+
+						<option  value="<%=item._id%>" id="address"><%=item.street%>,<%=item.city%>,<%=item.state%>,<%=item.zip%>,<%=item.country%>,<%=item.landmark%>,<%=item.mobile%></option>
+
+					<% }) %></select>
+					<button>Edit Adreess</button>
+					</div>
+						<%# address%> 
+
+					<div class="col-lg-4">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="cart-detail">
+									<h2>Cart Total</h2>
+									<ul>
+										<li>
+											<span>Subtotal</span> <span><%=TotalCartPrice %></span>
+											<ul>
+												<% Cart.forEach(cart => { %>
+												<li><span><%=cart.productName %></span> <span><%=cart.price %></span></li>
+												<% }) %>
+											</ul>
+										</li>
+										<li><span>Shipping</span> <span><%=shipping %></span></li>
+										<li><span>Order Total</span> <span><%=TotalCartPrice +shipping %></span></li>
+									</ul>
+								</div>
+						   </div>
+
+						   <div class="w-100"></div>
+
+						   <div class="col-md-12">
+								<div class="cart-detail">
+									<h2>Payment Method</h2>
+									
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio" id="online" value="Online"  onchange="chgangemethod(this.value)">online</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio" id="cod" value="COD" onchange="chgangemethod(this.value)"> Cash on delivery</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="checkbox">
+											   <!-- <label><input type="checkbox" value="">Online Payment</label> -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<p><a href="#" class="btn btn-primary" onclick="placeOrder('<%=userId %>')">Place an order</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+		<script>
+			let value
+			 function chgangemethod(params) {
+				console.log("params",params);
+				value=params
+			}
+		   async function placeOrder(userId){
+			  console.log(value);
+			  
+			// const COD=document.getElementById('cod').value
+			// const Online=document.getElementById('Online').value
+			console.log("userId",userId);
+			
+			const address=document.getElementById('address').value;
+			console.log("address",address);
+			const response= await fetch('/placeOrder',{
+				
+				method:"post",
+				headers: {
+                        'Content-Type': 'application/json',
+                    },
+					body:JSON.stringify({userId:userId,address:address,value:value})
+			})
+			const result = await response.json();
+			if(result){
+
+				alertify.success("success");
+			}
+			
+
+			
+		   }
+		</script>
+		<script src= "//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+		<%-include('footer') %>

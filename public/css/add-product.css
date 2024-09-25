@@ -1,0 +1,76 @@
+*{
+    padding: 0px;
+    box-sizing: border-box;
+}
+body{
+    background-color: #e6e2cc;
+   /* background-image: url(); */
+}
+.forms{
+    width: 180vh;
+    height: 150vh;
+    backdrop-filter: blur(10px);
+    background-color: #e6e2cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    margin-top: 10vh;
+}
+.main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.input{
+    font-weight: bold;
+    width: 130vh;
+    height: 10vh;
+    /* background: repeating-linear-gradient(to right,#7d52a2,#171c17 20%); */
+    background-color: #e6e2cc;
+    font-size: 3vh ;
+}
+*{
+    padding: 0px;
+    box-sizing: border-box;
+    margin: 0px;
+}
+.header{
+    height: 99vh;
+    width: 221vh;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    background-color: rgb(234, 209, 209);
+    
+}
+.container{
+    width: 50vh;
+    height: 30vh;
+    background-color: chocolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.addcategoryinput{
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    width: 40vh;
+    height: 6vh;
+    border-radius: 5vh;
+    background-color: rgb(12, 53, 131);
+    color: black;
+}
+.btn{
+  margin-right: 10vh;
+    font-size: x-large;
+    font-weight: bold;
+    text-align: center;
+    width: 20vh;
+    height: 4vh;
+    border-radius: 5vh;
+    background-color: rgb(70, 89, 125);
+    color: black;
+}

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/signupout.css">
+    <title>Registration Form</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.875em;
+        }
+    </style>
+</head>
+
+<body class="bg-red-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-center text-2xl font-bold mb-6">Registration</h1>
+        <form id="registrationForm" method="post" action="/signup">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700">Username</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" id="username" placeholder="Username" name="username">
+                <div id="usernameError" class="error"></div>
+                <% if (errorm?.nameerr){%>
+                <div class="errorv">
+                    <p style="color: brown;">
+                        <%=errorm.nameerr%>
+                    </p>
+                </div>
+                <%}%>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700">Email</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" id="email" placeholder="Email" name="email">
+                <div id="emailError" class="error"></div>
+                <% if (errorm?.emailError){%>
+                <div class="errorv">
+                    <p style="color: brown;">
+                        <%=errorm.emailError%>
+                    </p>
+                </div>
+                <%}%>
+            </div>
+            <div class="mb-4">
+                <label for="mobile" class="block text-gray-700">Mobile</label>
+                <div class="flex items-center border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500">
+                    <input class="flex-1 px-4 py-2 border-0 focus:outline-none" type="text" id="phoneNumber" placeholder="Mobile" name="phoneNumber">
+                </div><br>
+                <div style="color: red;" id="OtpError"></div>
+                <a style="background-color: rgb(230, 100, 100); width: 9rem; height: 20px; border-radius: 4px;" id="SentOtp" onclick="sendOtp()">Send OTP</a>
+            </div>
+            <input type="number" class="flex-1 px-4 py-2 border-0 focus:outline-none" placeholder="Enter OTP" id="enterotp" name="otp" style="display: none;">
+            <a style="background-color: rgb(230, 100, 100); width: 9rem; height: 20px; border-radius: 4px;" id="verifyOtp" style="display: none;" onclick="verifyOtp()">Verify OTP</a>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700">Password</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" id="password" placeholder="Password" name="password">
+                <div id="passwordError" class="error"></div>
+                <% if (errorm?.perror){%>
+                <div class="errorv">
+                    <p style="color: brown;">
+                        <%=errorm.perror%>
+                    </p>
+                </div>
+                <%}%>
+            </div>
+            <div class="mb-4">
+                <label for="password2" class="block text-gray-700">Re-enter Password</label>
+                <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" id="password2" placeholder="Re-enter Password" name="password2">
+                <div id="password2Error" class="error"></div>
+                <%if (errorm?.cperror){%>
+                <div class="errorv">
+                    <p style="color: brown;">
+                        <%= errorm.cperror %>
+                    </p>
+                </div>
+                <% }%>
+            </div>
+            <div>
+                <button type="submit" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">SIGNUP</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        async function sendOtp() {
+           
+            const MobileRegex = /^(\+?\d{1,3}[-.\s]?)?(\d{10})$/;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const otpErrorElement = document.getElementById('OtpError');
+
+            if (phoneNumber === '') {
+                otpErrorElement.textContent = 'Enter the phone Number';
+            } else if (!MobileRegex.test(phoneNumber)) {
+                otpErrorElement.textContent = 'Invalid Phone Number';
+            } else {
+                otpErrorElement.textContent = ''; // Clear any previous error message
+
+                try {
+                    const response = await fetch('/OtpValidation', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ phoneNumber: phoneNumber }),
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        document.getElementById("enterotp").style.display = "block";
+                       document.getElementById('verifyOtp').style.display='block'
+                    } else {
+                        otpErrorElement.textContent = 'Failed to send OTP. Please try again.';
+                    }
+                } catch (error) {
+                    console.log(error.message);
+                    otpErrorElement.textContent = 'An error occurred. Please try again.';
+                }
+            }
+        }
+        // ott variefy
+
+        async function verifyOtp() {
+            try {
+                const otp = document.getElementById('enterotp').value;
+                const response = await fetch('/OtpVerify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ otp: otp }),
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('OTP verified successfully!');
+                        document.getElementById("enterotp").style.display = "none";
+                        document.getElementById("verifyOtp").style.display = "none";
+                        document.getElementById("SentOtp").style.display = "none";
+
+                } else {
+                    alert('OTP verification failed. Please try again.');
+                }
+            } catch (error) {
+                console.log(error.message);
+                alert('An error occurred. Please try again.');
+            }
+        }
+
+// validation
+
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            document.getElementById('usernameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+            document.getElementById('password2Error').textContent = '';
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const password2 = document.getElementById('password2').value.trim();
+
+            let valid = true;
+
+            if (username === '') {
+                document.getElementById('usernameError').textContent = 'Username is required';
+                valid = false;
+            }
+
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address';
+                valid = false;
+            }
+
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            if (!passwordPattern.test(password)) {
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long and contain at least one letter and one number';
+                valid = false;
+            }
+
+            if (password !== password2) {
+                document.getElementById('password2Error').textContent = 'Passwords do not match';
+                valid = false;
+            }
+
+            if (valid) {
+                this.submit();
+            }
+        });
+    </script>
+</body>
+
+</html>

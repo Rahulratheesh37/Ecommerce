@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/addCategory.css">
+    <title>Update Category</title>
+</head>
+<body>
+     <header class="header">
+        <div class="container">
+            <nav>
+                <div class="bodys">
+                    <h1> Update Add Category</h1></div>
+                    
+                    <div>
+                        <form action="/UpdateCategory/<%= UpdateCategory._id %>" id="submitForm" method="post"><br>
+                         <hr>
+                        <label  style="font-weight: bolder;padding-left: 5vh;"> Sub Category Name</label>
+                        <input id="CategoryName" type="text" placeholder="Categorie Name" name="name" class="input" value="<%= UpdateCategory.name %>"><br><br>
+                        <hr>
+                      <button onclick=""  class="add" type="submit">Update Category</button>
+                    </form> 
+                    </div>
+                    
+                
+            </nav>
+        </div>
+
+     </header>
+
+     </script>
+</body>
+</html>
+ 
